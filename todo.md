@@ -4,4 +4,8 @@
 
 [x]define schema for use details
 
-[]authenticate the user with the details from the db
+[x]bcrypt to hash passwords and compare them
+
+[x]authenticate the user with the details from the db
+
+[]need to create sessions using jwt
