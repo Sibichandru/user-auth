@@ -6,15 +6,17 @@ const login = async (req, res) => {
   const { username, password } = req.body;
   const checkUser = `SELECT COUNT(*) FROM userDetails WHERE username = $1`;
   const checkPass = `SELECT * FROM userDetails WHERE username = $1`;
-  const hashedPass = bcrypt.hash(password,10);
   try {
     client.query(checkUser, [username], 
-      (err, result) => {
-        if( 1 == result.rows[0].count ){
+      async (err, result) => {
+        if( 1 == await result.rows[0].count ){
           client.query(checkPass,[username],
-            (err,result)=>{
-              const pass = result.rows[0].password;
-              const passwordMatch = bcrypt.compare(String(pass), String(hashedPass));
+            async (err,result)=>{
+              const hashedPass = await bcrypt.hash(password,10);
+              const pass = await result.rows[0].password;
+              console.log(pass);
+              console.log(hashedPass);
+              const passwordMatch = await bcrypt.compare(String(pass), String(hashedPass));
               if(passwordMatch){
                 console.log(passwordMatch);
                 return res.render('landingpage');
